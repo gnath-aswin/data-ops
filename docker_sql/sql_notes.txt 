@@ -1,0 +1,58 @@
+
+# Join tables
+
+select 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	concat(zpu."Borough",'/',zpu."Zone") as pickup_loc,
+	concat(zdo."Borough",'/',zdo."Zone") as dropoff_loc
+from 
+	yellow_taxi_trips t,
+	zones zpu,
+	zones zdo
+where
+	t."PULocationID" = zpu."LocationID" and
+	t."DOLocationID" = zdo."LocationID"
+limit 100;
+
+OR 
+
+select 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	concat(zpu."Borough",'/',zpu."Zone") as pickup_loc,
+	concat(zdo."Borough",'/',zdo."Zone") as dropoff_loc
+from 
+	yellow_taxi_trips t join zones zpu on t."PULocationID" = zpu."LocationID"
+	join zones zdo on t."DOLocationID" = zdo."LocationID"	
+limit 100;
+
+
+# Checking if data is missing
+select 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+    "PULocationID"
+    "DOLocationID"
+from 
+	yellow_taxi_trips t 
+where
+    "PULocationID is null;
+
+
+# Analytics
+
+select 
+	cast(tpep_dropoff_datetime as date) as "day",
+	"DOLocationID",
+	count(1) as "count",
+	max(total_amount),
+	max(passenger_count)
+from 
+	yellow_taxi_trips t 
+group by
+    1, 2
+order by 1 asc, 2 desc ;

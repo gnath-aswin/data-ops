@@ -1,0 +1,4 @@
+/docker_sql/ny_taxi_postgres_data/
+*.csv
+*.parquet
+*.txt
